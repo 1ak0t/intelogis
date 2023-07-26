@@ -2,28 +2,45 @@ import {polyline} from '../../test';
 import {MapContainer, Marker, Polyline, Popup, TileLayer, useMap} from 'react-leaflet'
 import {rotateLatLng} from '../../utils/rotateCoordinates';
 import './map.scss'
+import {useAppSelector} from '../../hooks';
+import {nanoid} from 'nanoid';
+import L, {latLngBounds} from 'leaflet';
+import {coordinatesType, coordinatesArrayType} from '../../types/coordinatesType';
 
 const colorOptions = { color: 'blue' };
 const coordinates = rotateLatLng(polyline);
 
+type ChangeViewType = {
+  center: coordinatesType;
+  markers: coordinatesArrayType;
+}
+function ChangeView({center, markers}: ChangeViewType) {
+  const map = useMap();
+  map.setView(center, 14);
+
+  let markerBounds = latLngBounds([]);
+  markers.forEach(marker => markerBounds.extend(marker));
+  markerBounds.isValid() && map.fitBounds(markerBounds);
+  return null;
+}
+
 function Map() {
+  const pins = useAppSelector(state => state.pins);
+
   return (
     <section className='map'>
-      <MapContainer center={[59.84660399, 30.29496392]} zoom={13} scrollWheelZoom={true} className='map__container'>
+      <MapContainer center={[59.847278, 30.295984]} scrollWheelZoom={true} className='map__container'>
+        <ChangeView center={[59.847278, 30.295984]} markers={pins} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Marker position={[59.84660399, 30.29496392]}>
+        {pins.map(pin => <Marker position={pin} key={nanoid()}>
           <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+            {pin}
           </Popup>
-        </Marker>
-        <Marker position={[59.82934196, 30.42423701]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
+        </Marker>)}
+
         <Polyline pathOptions={colorOptions} positions={coordinates} />
       </MapContainer>
     </section>
