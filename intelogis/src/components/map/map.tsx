@@ -1,14 +1,11 @@
-import {polyline} from '../../test';
 import {MapContainer, Marker, Polyline, Popup, TileLayer, useMap} from 'react-leaflet'
-import {rotateLatLng} from '../../utils/rotateCoordinates';
 import './map.scss'
 import {useAppSelector} from '../../hooks';
 import {nanoid} from 'nanoid';
-import L, {latLngBounds} from 'leaflet';
+import {latLngBounds} from 'leaflet';
 import {coordinatesType, coordinatesArrayType} from '../../types/coordinatesType';
 
 const colorOptions = { color: 'blue' };
-const coordinates = rotateLatLng(polyline);
 
 type ChangeViewType = {
   center: coordinatesType;
@@ -26,6 +23,7 @@ function ChangeView({center, markers}: ChangeViewType) {
 
 function Map() {
   const pins = useAppSelector(state => state.pins);
+  const route = useAppSelector(state => state.polyline);
 
   return (
     <section className='map'>
@@ -41,7 +39,7 @@ function Map() {
           </Popup>
         </Marker>)}
 
-        <Polyline pathOptions={colorOptions} positions={coordinates} />
+        <Polyline pathOptions={colorOptions} positions={route} />
       </MapContainer>
     </section>
   );
