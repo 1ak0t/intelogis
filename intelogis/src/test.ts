@@ -1,6 +1,6 @@
-import L, {LatLngExpression} from 'leaflet';
+import {coordinatesArrayType} from './types/coordinatesType';
 
-export const polyline: [number, number][] = [
+export const polyline: coordinatesArrayType = [
   [
     30.295984,
     59.847278
