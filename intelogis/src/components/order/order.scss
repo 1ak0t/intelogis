@@ -1,0 +1,28 @@
+.order {
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+
+  &--active {
+    background-color: blue;
+    color: white;
+
+    .order__coordinates {
+      color: white;
+    }
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+  }
+
+  &__coordinates {
+    font-size: 10px;
+    color: rgba(0,0,0,0.75);
+  }
+}
